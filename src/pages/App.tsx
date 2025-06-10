@@ -8,7 +8,7 @@ function App() {
   const [respuesta, setRespuesta] = useState('');
   const [cargando, setCargando] = useState(false);
   const [documentosSeleccionados, setDocumentosSeleccionados] = useState<string[]>([]);
-
+  const [documentosDetalle, setDocumentosDetalle] = useState<any[]>([]);
   const location = useLocation();
 
   useEffect(() => {
@@ -17,6 +17,25 @@ function App() {
     if (docs) {
       const nombres = decodeURIComponent(docs).split(',');
       setDocumentosSeleccionados(nombres);
+
+      const fetchDocs = async () => {
+        try {
+          const response = await fetch(
+            `https://pilotoiabackendapis-ctfgcmc9hwdja4d6.canadacentral-01.azurewebsites.net/api/ArchivoPiloto/listar?TamanioPagina=100&NumeroPagina=1&Filtro=`
+          );
+          const data = await response.json();
+          const todos = data.result.lista || [];
+
+          const seleccionados = todos.filter((doc: any) =>
+            nombres.includes(doc.titulo)
+          );
+          setDocumentosDetalle(seleccionados);
+        } catch (error) {
+          console.error('Error al obtener documentos:', error);
+        }
+      };
+
+      fetchDocs();
     }
   }, [location.search]);
 
@@ -104,17 +123,27 @@ function App() {
 
         {/* INFO para pantallas grandes */}
         <div className="info-container info-grande">
-          <label className="info-label">
-            <b>Reglamento de la Ley N° 32069, ley general de contrataciones públicas</b><br />
-          </label>
-          <a
-            href="https://acortar.link/Rtr3wE"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="info-link"
-          >
-            https://acortar.link/Rtr3wE
-          </a>
+            {documentosDetalle.map((doc) => {
+              const archivos = JSON.parse(doc.archivos || '[]');
+              return (
+                <div key={doc.idPiloto}>
+                  <label className="info-label">
+                    <b>{doc.titulo}</b><br />
+                  </label>
+                  {archivos.map((a: any, i: number) => (
+                    <a
+                      key={i}
+                      href={encodeURI(a.RutaArchivo)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="info-link"
+                    >
+                      {a.NombreArchivo}
+                    </a>
+                  ))}
+                </div>
+              );
+            })}
         </div>
       </section>
     </div>
