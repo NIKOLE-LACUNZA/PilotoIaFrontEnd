@@ -26,9 +26,12 @@ function App() {
           const data = await response.json();
           const todos = data.result.lista || [];
 
-          const seleccionados = todos.filter((doc: any) =>
-            nombres.includes(doc.titulo)
-          );
+          const seleccionados = todos.filter((doc: any) => {
+            const archivos = JSON.parse(doc.archivos || '[]');
+            return archivos.some((a: any) => nombres.includes(a.NombreArchivo));
+          });
+          console.log('docs en query:', nombres);
+console.log('documentos encontrados:', seleccionados);
           setDocumentosDetalle(seleccionados);
         } catch (error) {
           console.error('Error al obtener documentos:', error);
@@ -80,17 +83,28 @@ function App() {
 
           {/* INFO para pantallas medianas y pequeñas */}
           <div className="info-container info-mediana">
-            <label className="info-label">
-              <b>Reglamento de la Ley N° 32069, ley general de contrataciones públicas</b><br />
-            </label>
-            <a
-              href="https://acortar.link/Rtr3wE"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="info-link"
-            >
-              https://acortar.link/Rtr3wE
-            </a>
+            {documentosDetalle.map((doc) => {
+              console.log('documentosDetalle:', documentosDetalle);
+              const archivos = JSON.parse(doc.archivos || '[]');
+              return (
+                <div key={doc.idPiloto}>
+                  <label className="info-label">
+                    <b>{doc.titulo}</b><br />
+                  </label>
+                  {archivos.map((a: any, i: number) => (
+                    <a
+                      key={i}
+                      href={encodeURI(a.RutaArchivo)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="info-link"
+                    >
+                      {a.NombreArchivo}
+                    </a>
+                  ))}
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -124,6 +138,7 @@ function App() {
         {/* INFO para pantallas grandes */}
         <div className="info-container info-grande">
             {documentosDetalle.map((doc) => {
+              console.log('documentosDetalle:', documentosDetalle);
               const archivos = JSON.parse(doc.archivos || '[]');
               return (
                 <div key={doc.idPiloto}>

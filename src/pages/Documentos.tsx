@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import Menu from '../components/MenuSandwich';
 import './Documentos.css';
 import Modal from 'react-modal';
@@ -32,10 +31,8 @@ const Documentos: React.FC = () => {
   const [temasEditados, setTemasEditados] = useState('');
   const [archivosCombinados, setArchivosCombinados] = useState<any[]>([]);
   const [idsEliminados, setIdsEliminados] = useState<number[]>([]);
-  const [documentosDetalle, setDocumentosDetalle] = useState<any[]>([]);
-  const [documentosSeleccionados, setDocumentosSeleccionados] = useState<string[]>([]);
 
-  const location = useLocation();
+
   const tamanioPagina = 3;
 
     useEffect(() => {
@@ -76,34 +73,6 @@ const Documentos: React.FC = () => {
     setArchivosCombinados(actualesFormateados);
   }
 }, [documentoSeleccionado]);
-
-  useEffect(() => {
-    const fetchDocumentos = async () => {
-      const params = new URLSearchParams(location.search);
-      const docs = params.get('docs');
-      if (docs) {
-        const nombres = decodeURIComponent(docs).split(',');
-        setDocumentosSeleccionados(nombres);
-
-        try {
-          const response = await fetch(
-            `https://pilotoiabackendapis-ctfgcmc9hwdja4d6.canadacentral-01.azurewebsites.net/api/ArchivoPiloto/listar?TamanioPagina=100&NumeroPagina=1&Filtro=`
-          );
-          const data = await response.json();
-          const todos = data.result.lista || [];
-
-          const seleccionados = todos.filter((doc: any) =>
-            nombres.includes(doc.titulo)
-          );
-          setDocumentosDetalle(seleccionados);
-        } catch (error) {
-          console.error('Error al obtener documentos:', error);
-        }
-      }
-    };
-
-    fetchDocumentos();
-  }, [location.search]);
 
   const manejarCambio = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBusqueda(e.target.value);
