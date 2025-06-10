@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import Menu from '../components/MenuSandwich';
 import './Documentos.css';
 import Modal from 'react-modal';
@@ -31,27 +32,31 @@ const Documentos: React.FC = () => {
   const [temasEditados, setTemasEditados] = useState('');
   const [archivosCombinados, setArchivosCombinados] = useState<any[]>([]);
   const [idsEliminados, setIdsEliminados] = useState<number[]>([]);
+  const [documentosDetalle, setDocumentosDetalle] = useState<any[]>([]);
+  const [documentosSeleccionados, setDocumentosSeleccionados] = useState<string[]>([]);
 
+  const location = useLocation();
   const tamanioPagina = 3;
-    useEffect(() => {
-    obtenerDocumentos();
-  }, [paginaActual, busqueda]);
-  
-  const obtenerDocumentos = async () => {
-    setCargando(true);
-    try {
-      const respuesta = await fetch(`https://pilotoiabackendapis-ctfgcmc9hwdja4d6.canadacentral-01.azurewebsites.net/api/ArchivoPiloto/listar?TamanioPagina=${tamanioPagina}&NumeroPagina=${paginaActual}&Filtro=${busqueda}`);
-      const datos = await respuesta.json();
-      setDocumentos(datos.result.lista || []);
-      const total = datos.result.totalFilas || 0;
-      setTotalPaginas(Math.ceil(total / tamanioPagina));
 
-    } catch (err: any) {
-      setError(err.message || 'Error al obtener documentos');
-    } finally {
-      setCargando(false);
-    }
-  };
+    useEffect(() => {
+      obtenerDocumentos();
+    }, [paginaActual, busqueda]);
+    
+    const obtenerDocumentos = async () => {
+      setCargando(true);
+      try {
+        const respuesta = await fetch(`https://pilotoiabackendapis-ctfgcmc9hwdja4d6.canadacentral-01.azurewebsites.net/api/ArchivoPiloto/listar?TamanioPagina=${tamanioPagina}&NumeroPagina=${paginaActual}&Filtro=${busqueda}`);
+        const datos = await respuesta.json();
+        setDocumentos(datos.result.lista || []);
+        const total = datos.result.totalFilas || 0;
+        setTotalPaginas(Math.ceil(total / tamanioPagina));
+
+      } catch (err: any) {
+        setError(err.message || 'Error al obtener documentos');
+      } finally {
+        setCargando(false);
+      }
+    };
 
   useEffect(() => {
   if (documentoSeleccionado) {
@@ -61,8 +66,6 @@ const Documentos: React.FC = () => {
     setIdsEliminados([]);
 
     const actuales = JSON.parse(documentoSeleccionado.archivos || '[]') || [];
-
-    // Formatear actuales con IdArchivo
     const actualesFormateados = actuales.map((a: any) => ({
       NombreArchivo: a.NombreArchivo,
       RutaArchivo: a.RutaArchivo,
@@ -73,6 +76,34 @@ const Documentos: React.FC = () => {
     setArchivosCombinados(actualesFormateados);
   }
 }, [documentoSeleccionado]);
+
+  useEffect(() => {
+    const fetchDocumentos = async () => {
+      const params = new URLSearchParams(location.search);
+      const docs = params.get('docs');
+      if (docs) {
+        const nombres = decodeURIComponent(docs).split(',');
+        setDocumentosSeleccionados(nombres);
+
+        try {
+          const response = await fetch(
+            `https://pilotoiabackendapis-ctfgcmc9hwdja4d6.canadacentral-01.azurewebsites.net/api/ArchivoPiloto/listar?TamanioPagina=100&NumeroPagina=1&Filtro=`
+          );
+          const data = await response.json();
+          const todos = data.result.lista || [];
+
+          const seleccionados = todos.filter((doc: any) =>
+            nombres.includes(doc.titulo)
+          );
+          setDocumentosDetalle(seleccionados);
+        } catch (error) {
+          console.error('Error al obtener documentos:', error);
+        }
+      }
+    };
+
+    fetchDocumentos();
+  }, [location.search]);
 
   const manejarCambio = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBusqueda(e.target.value);

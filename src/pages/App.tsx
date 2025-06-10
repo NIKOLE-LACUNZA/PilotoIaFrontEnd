@@ -33,7 +33,7 @@ function App() {
         })
       });
       if (!res.ok) {
-      const errorTexto = await res.text(); // 👈 leer contenido de error
+      const errorTexto = await res.text();
       console.error('Error del servidor:', res.status, errorTexto);
       throw new Error(`Servidor respondió con ${res.status}`);
     }
