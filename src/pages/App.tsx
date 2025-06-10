@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import './App.css';
+import './App.css'; 
+import Menu from '../components/MenuSandwich';
 
 function App() {
   const [consulta, setConsulta] = useState('');
@@ -34,7 +35,7 @@ function App() {
         className='fractal'
         alt="Logo Fractal"
       />
-      
+      <Menu />
       <section className='izquierda'>
         <div className="titulo-info">
           <h1 className='Titulo'>Piloto IA</h1> 

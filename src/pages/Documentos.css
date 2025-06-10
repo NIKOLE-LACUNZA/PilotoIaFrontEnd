@@ -1,0 +1,381 @@
+/* Logo Fractal */
+.fractal {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: 13rem;
+  height: auto;
+  z-index: 1000;
+}
+
+/* Contenedor general centrado arriba */
+.contenido-documentos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20vh;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* Formulario de búsqueda centrado */
+.contenedor-formulario {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+/* Formulario responsive */
+.busqueda-formulario {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Input de búsqueda */
+.busqueda-input {
+  flex: 1 1 200px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Botón de búsqueda */
+.busqueda-boton {
+  padding: 10px 16px;
+  background-color: #213547;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.busqueda-boton:hover {
+  background-color: #1a2e3b;
+}
+
+/* boton agregar nuevo registro */
+.boton-nuevo {
+  margin: 20px 0 10px;
+  padding: 8px 14px;
+  font-size: 14px;
+  background-color: #0076c6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.boton-nuevo:hover {
+  background-color: #005ea3;
+}
+
+/* Tabla de resultados */
+.tabla-documentos {
+  width: 90%;
+  margin: 10px auto;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.tabla-documentos th,
+.tabla-documentos td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.tabla-documentos th {
+  background-color: #213547;
+  color: white;
+}
+
+.tabla-documentos tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Mensaje de error */
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.busqueda-boton {
+  width: 6rem;
+  height: 3rem;
+  background-color: #213547;
+  color: #fff;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.busqueda-boton:hover {
+  background-color: blue;
+}
+
+.link-archivo {
+  text-decoration: none;
+  color: black;
+}
+
+.link-archivo:hover{
+  color: #0076C6;
+  text-decoration: underline;
+}
+
+/* paginacion */
+.paginacion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+  font-size: 15px;
+}
+
+.paginacion span {
+  all: unset; /* ❗️ elimina todo el estilo por defecto (border, padding, etc.) */
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s ease;
+  user-select: none;
+}
+
+.paginacion .numero-pagina:hover,
+.paginacion .navegador:hover {
+  color: #0076c6;
+  text-decoration: underline;
+}
+
+.paginacion .activo {
+  font-weight: bold;
+  color: #0076c6;
+  text-decoration: underline;
+}
+
+.paginacion .puntos {
+  color: #999;
+  cursor: default;
+}
+
+.paginacion .deshabilitado {
+  color: #ccc;
+  cursor: default;
+}
+
+
+
+/* inicio modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+
+.modal-contenido {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  outline: none;
+  width: 500px;
+  max-width: 90%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+}
+
+.modal-contenido h2{
+  text-align: center;
+}
+
+.fila-formulario {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.etiqueta {
+  width: 100px;
+  font-weight: bold;
+  margin-right: 10px;
+  text-align: left;
+}
+
+.campo-input {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.lista-archivos {
+  list-style: none;
+  margin: 0;
+}
+
+.archivo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+}
+
+.archivo-nombre {
+  font-size: 14px;
+  color: #222;
+}
+
+.modal-titulo {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.fila-formulario {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.etiqueta {
+  width: 80px;
+  font-weight: bold;
+  margin-right: 10px;
+  text-align: right;
+}
+
+.campo-input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.lista-archivos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.archivo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 6px 0;
+}
+
+.archivo-nombre {
+  font-size: 14px;
+  color: #222;
+  word-break: break-word;
+}
+
+.boton-eliminar {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #e53935;
+  display: flex;
+  align-items: center;
+}
+
+.boton-eliminar .material-symbols-outlined {
+  font-size: 20px;
+  transition: color 0.2s ease;
+}
+
+.boton-eliminar:hover .material-symbols-outlined {
+  color: #b71c1c;
+}
+
+.cargar-nuevo {
+  color: #03a9f4;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 10px;
+  user-select: none;
+}
+
+.cargar-nuevo:hover {
+  text-decoration: underline;
+}
+
+.modal-cuerpo {
+  position: relative;
+}
+
+.boton-cerrar {
+  position: absolute;
+  top: 5;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #999;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+}
+
+.boton-cerrar:hover {
+  color: #333;
+}
+
+.fila-archivos{
+  margin-left: 1.8rem;
+}
+
+.boton-editar {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.boton-editar button{
+  width: 7rem;
+  height: 2.2rem;
+  border-radius: 8px;
+  background-color: #0076C6;
+  margin: 0 auto;
+  border-color: none;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.boton-editar button:hover{
+  background-color: red;
+  cursor: pointer;
+}
+
+/* fin modal editar */
+
+
