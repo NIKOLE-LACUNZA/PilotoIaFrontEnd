@@ -281,7 +281,19 @@ const eliminarArchivo = (index: number) => {
                     >
                       {doc.idPiloto}
                     </td>
-                    <td>{doc.titulo}</td>
+                    <td>
+                      <span
+                        onClick={() => {
+                          const archivos = JSON.parse(doc.archivos || '[]');
+                          const nombres = archivos.map((a: any) => a.NombreArchivo);
+                          const query = encodeURIComponent(nombres.join(','));
+                          window.location.href = `/` + `?docs=${query}`;
+                        }}
+                        style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}
+                      >
+                        {doc.titulo}
+                      </span>
+                    </td>
                     <td>{doc.temas}</td>
                     <td>
                       {archivos.map((a: any, i: number) => (

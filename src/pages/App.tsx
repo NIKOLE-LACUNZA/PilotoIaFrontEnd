@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './App.css'; 
 import Menu from '../components/MenuSandwich';
 
@@ -6,22 +7,40 @@ function App() {
   const [consulta, setConsulta] = useState('');
   const [respuesta, setRespuesta] = useState('');
   const [cargando, setCargando] = useState(false);
+  const [documentosSeleccionados, setDocumentosSeleccionados] = useState<string[]>([]);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const docs = params.get('docs');
+    if (docs) {
+      const nombres = decodeURIComponent(docs).split(',');
+      setDocumentosSeleccionados(nombres);
+    }
+  }, [location.search]);
 
   const manejarConsulta = async () => {
     setCargando(true);
     setRespuesta('');
     try {
-      const res = await fetch('https://backpilotoia-f7eeapfvazc3axcu.canadacentral-01.azurewebsites.net/api/chat', {
+      const res = await fetch('https://pilotoianuevobackend-bbb7fqc0hbd4ccaf.canadacentral-01.azurewebsites.net/api/document/preguntar-grupo', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ mensaje: consulta }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombresDocumentos: documentosSeleccionados,
+          pregunta: consulta
+        })
       });
-
+      if (!res.ok) {
+      const errorTexto = await res.text(); // 👈 leer contenido de error
+      console.error('Error del servidor:', res.status, errorTexto);
+      throw new Error(`Servidor respondió con ${res.status}`);
+    }
       const data = await res.json();
       setRespuesta(data.respuesta);
     } catch (error) {
+      console.error('Error en consulta:', error);
       setRespuesta('Error al consultar la API');
     } finally {
       setCargando(false);
